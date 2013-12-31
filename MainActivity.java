@@ -107,22 +107,27 @@ public class MainActivity extends Activity implements Runnable {
 			status.setText(status.getText().toString()
 					.replace("Desconectado", "Conectado"));
 			enabledButtons(false);
-
+			
 			// #Impressão
 			// header
 			nfeprinter.getMobilePrinter().Reset();
+			nfeprinter.printBar();
+			nfeprinter.getMobilePrinter().Reset();
+			nfeprinter.printCarinhaFeliz();
+			nfeprinter.getMobilePrinter().Reset();
 			nfeprinter.genNotaHeaderByFields(NfePrinterA7.templateHeader,
 					NfePrinterA7.tagsHeader, new String[] {"Input Service LTDA", "652", "2" });
+			/*
 			// descrição
 			StringBuilder valornfeStr = new StringBuilder();
 			valornfeStr
-					.append("         			Danfe Simplificado          1-Saida    ");
+				.append("         			Danfe Simplificado          1-Saida    ");
 			valornfeStr
-					.append("         			Documento Auxiliar da       NFe 617    ");
+				.append("         			Documento Auxiliar da       NFe 617    ");
 			valornfeStr
-					.append("        			Nota Fiscal Eletronica      Serie 2    ");
+				.append("         			Nota Fiscal Eletronica      Serie 2    ");
 			valornfeStr
-					.append("                                                      ");
+				.append("           	                                           ");
 			try {
 				nfeprinter.getMobilePrinter()
 						.SendString(valornfeStr.toString());
@@ -145,7 +150,8 @@ public class MainActivity extends Activity implements Runnable {
 			nfeprinter.genAllByFields(NfePrinterA7.templateNatOp1,
 					NfePrinterA7.tagsNatOp1, new String[] {
 					"Venda de Mercadoria, adquirida de", "terceiros" });
-
+			
+			
 			// emitente
 			// nfeprinter.getMobilePrinter().Reset();
 			nfeprinter.genAllByFields(NfePrinterA7.templateEmitter,
@@ -161,26 +167,27 @@ public class MainActivity extends Activity implements Runnable {
 					NfePrinterA7.tagsReceiver, new String[] {
 							"123456789.123456789.123456789.123", "11-04-2012",
 							"123456789.123456789.123456789.123",
-							"123456789.123456789.123456789.123", "11-04-2012", "123456789.12345",
+							"123456789.123456789.123456789.123", "11-04-2012", "123456789",
 							"123456789.12345", "123456789.123456789.12345678", "18:35",
 							"123456789.123456789.123456789." }, 1, NfePrinterA7.sizeslastitem,
-					1);
+					1);*/
 
 			// produtos
-			// nfeprinter.getMobilePrinter().Reset();
+			//nfeprinter.getMobilePrinter().Reset();
 			
 			//MÉTODO UTILIZADO PARA A IMPRESSÃO DA PARTE DE PRODUTO
 			
-			
-			nfeprinter.genNotaProductsByFields(NfePrinterA7.templateProduct1,
+			//" COD |      Produto      |CST|un|qtde|Val.Un|Descnt|Val.Tot| ICMS  |Al",
+			//5, 19, 3, 2, 4, 6, 6, 7, 7, 2
+/*			nfeprinter.genNotaProductsByFields(NfePrinterA7.templateProduct1,
 					NfePrinterA7.tagsTemplate1Content, NfePrinterA7.sizesTemplate1,
 					new String[][] {
-								{ "impressora portatil a7", "pc", "0010", "999,00", "100,00", "060","45,60","980,00" },
-								{ "Bobina de papel termico", "pc", "0100","  4,00", "2,0", "060", "45,60", "1234567,00" },
-								{ "Bobina de papel termico", "pc", "0999","  4,00", "10,0", "060","45,60", "500,00"},
-								{ "Bobina de papel", "pc", "0260","  4,00", "96,74", "060","45,60", "500,00"},
-								{ "Papel de teste", "ea", "0260"," 14,00", "91,00", "000","04,60", "100,00"}
-							}, "1");
+								{ "12345", "123456789.123456789", "123", "12", "1234", "123456","123456","1234567", "1234567", "12" },
+								{ "12345", "123456789.123456789", "123", "12", "1234", "123456","123456","1234567", "1234567", "12" },
+								{ "12345", "123456789.123456789", "123", "12", "1234", "123456","123456","1234567", "1234567", "12" },
+								{ "12345", "123456789.123456789", "123", "12", "1234", "123456","123456","1234567", "1234567", "12" },
+								{ "12345", "123456789.123456789", "123", "12", "1234", "123456","123456","1234567", "1234567", "12" }
+							}, "");
 			nfeprinter.genNotaProductsByFields(NfePrinterA7.templateProduct2,
 					NfePrinterA7.tagsTemplate2Content, NfePrinterA7.sizesTemplate2,
 					new String[][] {
@@ -189,12 +196,13 @@ public class MainActivity extends Activity implements Runnable {
 								{ "Bobina de papel termico2", "pc", "0999","  4,00", "10,0", "060","45,60", "500,00"},
 								{ "Bobina de papel2", "pc", "0260","  4,00", "96,74", "060","45,60", "500,00"},
 								{ "Papel de teste2", "ea", "0260"," 14,00", "91,00", "000","04,60", "100,00"}
-							}, "2");
+							}, "");
 			nfeprinter.genNotaProductsByFields(NfePrinterA7.templateProduct3,
 					NfePrinterA7.tagsTemplate3Content, NfePrinterA7.sizesTemplate3,
 					new String[][] {
 								{ "1234567890", "1234567890", "1234567890", "1234567", "1234567890"},
 							}, "0123,00");
+			
 			// descrição
 			nfeprinter.getMobilePrinter().Reset();
 			valornfeStr = new StringBuilder();
@@ -227,6 +235,7 @@ public class MainActivity extends Activity implements Runnable {
 		btnRec.setClickable(enabled);
 	}
 
+//----------------------------------------------------------------------------Boleto A7
 	public void genBoletoByClassA7() {
 		connected = boletoprinter.connect(false);
 		if (connected) {
@@ -238,7 +247,7 @@ public class MainActivity extends Activity implements Runnable {
 
 			boleto = new BoletoUtils();
 			boleto.setLinhaDigitavel("23792.38401 61130.370598 68001.271805 1 56220000320000");
-			boleto.setNomeBanco("Bradesco");
+			boleto.setNomeBanco("Bradesco Teste");
 			boleto.setCodBanco("237-2");
 			boleto.setLocalPagamento("Banco Bradesco S.A.");
 			boleto.setLocalOpcionalPagamento("Pagavel preferencialmente na rede bradesco ou banco postal.");
